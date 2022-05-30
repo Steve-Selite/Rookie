@@ -216,10 +216,10 @@ for epoch in range(epochs):
         out = model(img)
         loss = criterion(out,label)
 
-    optimizer.zero_grad()
-    loss.backward()
-    optimizer.step()
-    train_loss += loss.data
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+        train_loss += loss.data
 
     if (epoch+1)%100 == 0:
         print('epoch: {}, Train Loss: {:.6f}'.format(epoch+1, train_loss/len(train_image)))
