@@ -208,12 +208,6 @@ test_dataset = torch.utils.data.TensorDataset(test_image_t, test_label_t)
 test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=batchsize,shuffle=True)
 
 
-
-
-end_1 = time.time()
-print("Your running time_1 is:",int(end_1-start_1),'s')
-# 计算运行时间
-
 loss_list = []
 for epoch in range(epochs):
     model.train()
@@ -222,16 +216,22 @@ for epoch in range(epochs):
     for img,label in train_loader:
         out = model(img)
         loss = loss(out,label)
+    
+    optimizer.zero_grad()
+    loss.backward()
+    optimizer.step()   
+    train_loss += loss.data
 
-        optimizer.zero_grad()
-        loss.backward()
-        optimizer.step()
-        train_loss += loss.data
-
-        if (epoch+1)%100 == 0:
-            print('epoch: {}, Train Loss: {:.6f}'.format(epoch+1, train_loss/len(train_image)))
+    if (epoch+1)%100 == 0:     
+        print('epoch: {}, Train Loss: {:.6f}'.format(epoch+1, train_loss/len(train_image)))
 
     loss_list.append(train_loss/len(train_image))
+
+
+
+end_1 = time.time()
+print("Your running time_1 is:",int(end_1-start_1),'s')
+# 计算运行时间
 
 import os
 os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
